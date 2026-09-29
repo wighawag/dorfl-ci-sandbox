@@ -14,3 +14,5 @@ _Suggested default: merge | hold | drop_
 <!-- q1 fields: id=q1 kind=merge askedAtMain=b6636858df2e89d53e80ca6c978221881c2d47b3 -->
 
 **Your answer** (write below this line):
+
+merge
