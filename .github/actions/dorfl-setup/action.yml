@@ -1,0 +1,109 @@
+name: Setup dorfl
+description: Install Node.js, dorfl, the agent harness, and configure AI provider auth
+
+inputs:
+  ANTHROPIC_API_KEY:
+    description: 'Provider API key, forwarded to the agent environment as ANTHROPIC_API_KEY.'
+    required: false
+    default: ''
+
+# Project-toolchain boundary (task install-ci-document-toolchain-boundary):
+# This composite action provisions ONLY what dorfl + the agent harness need.
+# dorfl declares engines.node '>=18' and only PINS Node 22 below for its own
+# runtime — it does NOT provision the project's own toolchain (a project-
+# pinned package manager, a project Node version, rust, system packages,
+# project-dep install steps, ...).
+# A custom or conflicting project toolchain is supported ONLY via the
+# project-setup hook (sibling task install-ci-project-setup-hook); without
+# that hook the conflicting case is unsupported. install-ci does NOT detect
+# a likely conflict — the boundary is documentation, not detection.
+runs:
+  using: composite
+  steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+      with:
+        node-version: '22'
+        # setup-node (v5 and later) auto-enables package-manager caching. In v5
+        # it probed whatever manager package.json's packageManager named, during
+        # its own run and before that manager was on PATH, and crashed ("Unable
+        # to locate executable file"). Since v6 it only fires when package.json
+        # declares npm, and then fails if there is no npm lockfile. Either way
+        # it is the project's cache, not dorfl's: dorfl provisions ONLY its own
+        # runtime (toolchain boundary), so disable it explicitly.
+        package-manager-cache: false
+
+    - name: Configure git identity
+      shell: bash
+      run: |
+        git config user.name "dorfl[bot]"
+        git config user.email "dorfl[bot]@users.noreply.github.com"
+
+    # Pinned to the dorfl version that generated this action, so CI runs the
+    # same CLI that wrote these workflows (and never an unreviewed `latest` in a
+    # job holding write access and a provider key). Re-run `dorfl install-ci`
+    # after upgrading dorfl to move the pin.
+    - name: Install dorfl
+      shell: bash
+      run: npm install -g https://github.com/wighawag/dorfl-ci-sandbox-builds/releases/download/sandbox-e972795d/dorfl-0.15.0-sandbox.e972795d.tgz
+    # Pinned to the exact harness version this dorfl release declares
+    # (PI_HARNESS_VERSION), with every pi package it loads pinned too (npm
+    # `overrides`; a caret range on a 0.x version floats within the minor): the
+    # job holds a provider key, so no version may move on its own. Re-run
+    # `dorfl install-ci` to upgrade.
+    - name: Install agent harness (pi)
+      shell: bash
+      run: |
+        mkdir -p "$RUNNER_TEMP/dorfl-harness"
+        cd "$RUNNER_TEMP/dorfl-harness"
+        cat > package.json << 'HARNESS_EOF'
+        {
+          "private": true,
+          "dependencies": {
+            "@earendil-works/pi-coding-agent": "0.80.6"
+          },
+          "overrides": {
+            "@earendil-works/pi-agent-core": "0.80.6",
+            "@earendil-works/pi-ai": "0.80.6",
+            "@earendil-works/pi-tui": "0.80.6"
+          }
+        }
+        HARNESS_EOF
+        npm install --no-audit --no-fund
+        echo "$RUNNER_TEMP/dorfl-harness/node_modules/.bin" >> "$GITHUB_PATH"
+
+    # `pi --version` loads the harness's module graph, so an install whose pi
+    # packages do not load together fails HERE, not inside a dorfl agent launch.
+    - name: Check the agent harness loads (pi)
+      shell: bash
+      run: |
+        if ! pi --version; then
+          echo "::error title=dorfl-setup::The agent harness (pi) is installed but cannot start, so its pi packages do not load together. Re-run dorfl install-ci with a dorfl release that pins a working harness."
+          exit 1
+        fi
+
+    - name: Configure agent models (models.json)
+      shell: bash
+      run: |
+        mkdir -p ~/.pi/agent
+        cat > ~/.pi/agent/models.json << 'MODELS_EOF'
+        {
+          "providers": {
+            "anthropic": {
+              "apiKey": "$ANTHROPIC_API_KEY",
+              "baseUrl": "https://claude.etherplay.io"
+            }
+          }
+        }
+        MODELS_EOF
+
+    # Surface the configured provider API key(s) to the environment so the agent
+    # step (`pi`) can resolve the env var `models.json` references. The workflow
+    # passes the secret(s) via `with:` on the `uses:` line; we forward the
+    # non-empty one(s) to `$GITHUB_ENV` (Actions masks the value in logs).
+    - name: Export provider API key(s) to the environment
+      shell: bash
+      env:
+        ANTHROPIC_API_KEY: ${{ inputs.ANTHROPIC_API_KEY }}
+      run: |
+        if [ -n "${ANTHROPIC_API_KEY}" ]; then echo "ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}" >> "$GITHUB_ENV"; fi
