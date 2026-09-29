@@ -9,3 +9,5 @@
 <!-- q1 fields: id=q1 kind=stuck -->
 
 **Your answer** (write below this line):
+
+keep (re-test with dorfl main@071cb5a1: the protected-path rejection should end the run green)
