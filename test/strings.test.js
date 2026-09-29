@@ -10,3 +10,13 @@ test('capitalize upper-cases the first character', () => {
 	assert.equal(capitalize('dorfl'), 'Dorfl');
 	assert.equal(capitalize(''), '');
 });
+
+test('capitalize leaves the remainder untouched by default', () => {
+	assert.equal(capitalize('hELLO'), 'HELLO');
+});
+
+test('capitalize lower-cases the remainder with lowerRest', () => {
+	assert.equal(capitalize('hELLO', {lowerRest: true}), 'Hello');
+	assert.equal(capitalize('hello', {lowerRest: true}), 'Hello');
+	assert.equal(capitalize('', {lowerRest: true}), '');
+});
