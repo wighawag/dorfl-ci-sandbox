@@ -6,6 +6,18 @@ test('slugify joins words with dashes', () => {
 	assert.equal(slugify('Hello, World!'), 'hello-world');
 });
 
+test('slugify collapses consecutive separators to a single dash', () => {
+	assert.equal(slugify('a  --  b'), 'a-b');
+});
+
+test('slugify trims leading and trailing separators', () => {
+	assert.equal(slugify('  Hi!  '), 'hi');
+});
+
+test('slugify maps the empty string to an empty string', () => {
+	assert.equal(slugify(''), '');
+});
+
 test('capitalize upper-cases the first character', () => {
 	assert.equal(capitalize('dorfl'), 'Dorfl');
 	assert.equal(capitalize(''), '');
