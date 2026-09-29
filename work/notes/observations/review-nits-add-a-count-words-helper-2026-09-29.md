@@ -3,6 +3,7 @@ title: review-gate non-blocking nits for 'add-a-count-words-helper' (Gate 2 appr
 date: 2026-09-29
 status: open
 reviewOf: add-a-count-words-helper
+needsAnswers: true
 ---
 
 ## Non-blocking review findings
