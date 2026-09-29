@@ -3,6 +3,7 @@ title: review-gate non-blocking nits for 'text-layout-wrap' (Gate 2 approve)
 date: 2026-09-29
 status: open
 reviewOf: text-layout-wrap
+needsAnswers: true
 ---
 
 ## Non-blocking review findings
