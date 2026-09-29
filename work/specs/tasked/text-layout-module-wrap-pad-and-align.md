@@ -34,22 +34,7 @@ All width arithmetic (in `wrap`'s line accounting, `pad`'s fill count, `center` 
 10. As an internationalisation-conscious author, I want widths measured in user-perceived characters so a line containing an emoji or a combining accent is counted as its visible width, not its code-unit length, and my columns stay aligned.
 11. As a maintainer, I want each of `wrap`, `pad`, and `layout` usable and tested on its own, so the pieces compose but don't depend on each other's callers.
 
-### Autonomy notes
-
-The requirements are fully specified and agent-taskable — no `humanOnly` (no human decision gates the tasking) and no `needsAnswers` (no open questions block autonomous tasking). The grapheme-width primitive, the space-collapsing behaviour, and the center odd-space rule are ordinary implementation decisions to settle at tasking-time, not blocking ambiguities.
-
-## Implementation Decisions
-
-- New module beside `src/strings.js` (e.g. `src/layout.js`), exporting `wrap`, `pad`, `layout`.
-- A shared width primitive measures user-perceived characters via grapheme-cluster segmentation (e.g. `Intl.Segmenter` with `granularity: 'grapheme'`), returning count of segments; both a base+combining sequence and a single emoji segment count as 1.
-- `layout` is a thin composition of `wrap` + `pad` — it must not re-implement either.
-- `pad` options object with `align` defaulting to `left`; `center` uses a fixed rule for the odd extra space (decide and document, e.g. extra space to the right).
-
-## Testing Decisions
-
-- Each function tested in isolation: `wrap` (space breaks, long-word split, exact-width boundary), `pad` (three alignments, default, no-truncate on over-width), `layout` (every line exactly `width`, composed correctly).
-- Width behaviour tested with fixtures containing an emoji and a base-char-plus-combining-accent to prove they count as width 1 in wrapping, padding, and centring.
-- Follow the existing test conventions in `test/`.
+> Tasked into `work/tasks/` (`text-layout-wrap`, `text-layout-pad`, `text-layout-compose`). Implementation and testing detail now live in those tasks; this spec is trimmed to its durable framing.
 
 ## Out of Scope
 
