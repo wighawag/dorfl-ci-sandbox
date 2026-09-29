@@ -1,7 +1,5 @@
 <!-- dorfl-sidecar: item=task:add-truncate-text-max-helper-to-src-strings-js type=task slug=add-truncate-text-max-helper-to-src-strings-js allAnswered=false -->
 
-Item: [`task:add-truncate-text-max-helper-to-src-strings-js`](../tasks/ready/add-truncate-text-max-helper-to-src-strings-js.md)
-
 ## Q1
 
 **Land `work/add-truncate-text-max-helper-to-src-strings-js`? An unmerged `work/*` branch is awaiting an integration decision.**
@@ -16,3 +14,13 @@ _Suggested default: merge | hold | drop_
 **Your answer** (write below this line):
 
 merge
+
+## Q2
+
+**'task:add-truncate-text-max-helper-to-src-strings-js' was bounced — how should we proceed?**
+
+> rebasing `work/task-add-truncate-text-max-helper-to-src-strings-js` onto current main conflicted (aborted, never auto-resolved); the kept work is intact on the branch. Resolve it, then answer the merge question again.
+
+<!-- q2 fields: id=q2 kind=stuck -->
+
+**Your answer** (write below this line):
