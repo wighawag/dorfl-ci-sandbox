@@ -6,7 +6,7 @@ origin: issue
 originTrust: trusted
 covers: []
 blockedBy: []
-needsAnswers: true
+needsAnswers: false
 ---
 
 ## What to build
@@ -31,3 +31,9 @@ If, on drift-check, `slugify` is found MISSING or NOT matching the behaviour bel
 First run the drift-check: open `src/strings.js` and confirm `export function slugify(text)` already exists and lower-cases `text`, replaces each run of `[^a-z0-9]+` with a single `-`, and strips leading/trailing `-`. It does (present since the initial commit). Do NOT add or re-declare the function — that would duplicate the export. If it is somehow absent or behaves differently, STOP and surface the discrepancy instead of proceeding.
 
 Then extend `test/strings.test.js`: keep the existing `slugify('Hello, World!')` assertion and add assertions for the collapse case (`slugify('a  --  b')` === `'a-b'`), the trim case (`slugify('  Hi!  ')` === `'hi'`), and the empty-string case (`slugify('')` === `''`). Run `npm test` and confirm everything is green.
+
+## Applied answers 2026-09-29
+
+### q1: Land `work/task-add-slugify-text-helper-to-src-strings-js`? An unmerged `work/*` branch is awaiting an integration decision.
+
+merge
