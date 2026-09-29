@@ -45,7 +45,7 @@ runs:
     # after upgrading dorfl to move the pin.
     - name: Install dorfl
       shell: bash
-      run: npm install -g https://github.com/wighawag/dorfl-ci-sandbox-builds/releases/download/sandbox-071cb5a1/dorfl-0.15.0-sandbox.071cb5a1.tgz
+      run: npm install -g https://github.com/wighawag/dorfl-ci-sandbox-builds/releases/download/sandbox-1f1110d7/dorfl-0.15.0-sandbox.1f1110d7.tgz
     # Pinned to the exact harness version this dorfl release declares
     # (PI_HARNESS_VERSION), with every pi package it loads pinned too (npm
     # `overrides`; a caret range on a 0.x version floats within the minor): the
