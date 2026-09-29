@@ -2,6 +2,7 @@
 title: 'Add a titleCase(text) helper'
 slug: add-a-title-case-helper
 blockedBy: []
+needsAnswers: true
 ---
 
 ## What to build
