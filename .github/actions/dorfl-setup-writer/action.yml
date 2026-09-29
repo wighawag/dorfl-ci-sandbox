@@ -32,4 +32,4 @@ runs:
       shell: bash
       run: |
         cd "$RUNNER_TEMP"
-        npm install -g --ignore-scripts https://github.com/wighawag/dorfl-ci-sandbox-builds/releases/download/sandbox-e972795d/dorfl-0.15.0-sandbox.e972795d.tgz
+        npm install -g --ignore-scripts https://github.com/wighawag/dorfl-ci-sandbox-builds/releases/download/sandbox-071cb5a1/dorfl-0.15.0-sandbox.071cb5a1.tgz
