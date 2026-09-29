@@ -1,0 +1,11 @@
+{
+	"name": "dorfl-ci-sandbox",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"description": "A tiny string-utilities library used as a sandbox for dorfl's CI workflows.",
+	"scripts": {
+		"test": "node --test"
+	},
+	"license": "AGPL-3.0-only"
+}

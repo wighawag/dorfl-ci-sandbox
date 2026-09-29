@@ -1,0 +1,11 @@
+{
+  "verify": "npm test",
+  "harness": "pi",
+  "autoBuild": true,
+  "autoTask": true,
+  "observationTriage": "auto",
+  "surfaceBlockers": true,
+  "review": true,
+  "integration": "propose",
+  "agentDeadlineMinutes": 30
+}
