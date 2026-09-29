@@ -3,6 +3,7 @@ title: review-gate non-blocking nits for 'add-lower-rest-option-to-capitalize' (
 date: 2026-09-29
 status: open
 reviewOf: add-lower-rest-option-to-capitalize
+needsAnswers: true
 ---
 
 ## Non-blocking review findings
