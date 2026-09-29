@@ -2,6 +2,7 @@
 title: 'Mark markdown files as documentation for GitHub linguist'
 slug: mark-docs-as-documentation-for-linguist
 blockedBy: []
+needsAnswers: true
 ---
 
 ## What to build
