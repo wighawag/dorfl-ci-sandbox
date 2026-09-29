@@ -11,3 +11,5 @@ Item: [`observation:review-nits-add-lower-rest-option-to-capitalize-2026-09-29`]
 <!-- q1 fields: id=q1 -->
 
 **Your answer** (write below this line):
+
+resolve: the reviewer itself notes the latitude was directed by the task prompt, so nothing needs ratifying. Keep the note on record.
