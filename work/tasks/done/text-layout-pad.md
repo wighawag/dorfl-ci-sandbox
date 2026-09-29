@@ -47,3 +47,7 @@ This task edits the same module file as `text-layout-wrap`; it is serialized beh
 > Test the seams: all three alignments, omitted-`align` default, over-width no-truncate, and grapheme fixtures (emoji, combining accent) proving width-1 counting in fill and center split. Follow the conventions in `test/strings.test.js`. "Done" = `pad` exported and tested in isolation.
 >
 > RECORD non-obvious in-scope decisions (notably the exact odd-space center rule) in a `## Decisions` block at the end of your final report; if the rule warrants durable rationale, also note it inline where `center` is implemented.
+
+## Decisions
+
+- **Odd center-space rule: extra space goes to the RIGHT.** For a center fill of N, `left = floor(N/2)` and `right = N - left`, so an odd leftover lands on the right (e.g. `pad('hi', 5, {align:'center'})` → `' hi  '`). Documented in a JSDoc at the `center` implementation site. Alternative considered: extra to the left; chose right for consistency with left-alignment being the default bias (text drifts left, so surplus fill trails right). This is a user-visible output default local to `pad`; it does not touch `wrap`, and `layout` (compose task) will inherit it when it calls `pad`.

@@ -1,6 +1,6 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {wrap, width, graphemes} from '../src/layout.js';
+import {wrap, pad, width, graphemes} from '../src/layout.js';
 
 test('width measures user-perceived characters, not code units', () => {
 	assert.equal(width('hello'), 5);
@@ -60,4 +60,44 @@ test('wrap measures grapheme width for a combining-accent line', () => {
 test('wrap returns an empty array for whitespace-only input', () => {
 	assert.deepEqual(wrap('', 5), []);
 	assert.deepEqual(wrap('   ', 5), []);
+});
+
+test('pad left appends spaces to the right', () => {
+	assert.equal(pad('hi', 5, {align: 'left'}), 'hi   ');
+});
+
+test('pad defaults to left when align is omitted', () => {
+	assert.equal(pad('hi', 5), 'hi   ');
+	assert.equal(pad('hi', 5, {}), 'hi   ');
+});
+
+test('pad right prepends spaces', () => {
+	assert.equal(pad('hi', 5, {align: 'right'}), '   hi');
+});
+
+test('pad center splits the fill, extra space to the right', () => {
+	// Fill of 3 is odd: left = 1, right = 2.
+	assert.equal(pad('hi', 5, {align: 'center'}), ' hi  ');
+	// Even fill splits evenly.
+	assert.equal(pad('hi', 6, {align: 'center'}), '  hi  ');
+});
+
+test('pad returns an at-width line unchanged (no truncation)', () => {
+	assert.equal(pad('hello', 5, {align: 'center'}), 'hello');
+});
+
+test('pad returns an over-width line unchanged (no truncation)', () => {
+	assert.equal(pad('hello world', 5, {align: 'right'}), 'hello world');
+});
+
+test('pad measures grapheme width for the fill count', () => {
+	// Emoji counts as width 1, so fill is 4 not fewer.
+	assert.equal(pad('👍', 5, {align: 'left'}), '👍    ');
+	// Combining-accent glyph counts as width 1.
+	assert.equal(pad('e\u0301', 5, {align: 'right'}), '    e\u0301');
+});
+
+test('pad center split is grapheme-measured', () => {
+	// '👍' has width 1, fill of 4 splits evenly to 2 each side.
+	assert.equal(pad('👍', 5, {align: 'center'}), '  👍  ');
 });

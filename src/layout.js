@@ -87,3 +87,39 @@ export function wrap(text, width) {
 	flush();
 	return lines;
 }
+
+/**
+ * Pad a single line up to `width` grapheme clusters wide with spaces.
+ *
+ * `align` chooses the side(s) the fill goes on:
+ * - `'left'` (the default) appends spaces to the right — flush-left.
+ * - `'right'` prepends spaces — flush-right.
+ * - `'center'` splits the fill between both sides. The odd leftover space,
+ *   when the fill count is odd, goes to the RIGHT (left = floor(fill / 2),
+ *   right = the remainder), so centring is deterministic.
+ *
+ * Width is measured in user-perceived characters via the shared primitive, so
+ * an emoji or a combining-accent glyph counts as width 1 in the fill count and
+ * the centre split. A line whose measured width already meets or exceeds
+ * `width` is returned UNCHANGED — padding never truncates.
+ */
+export function pad(text, width_, {align = 'left'} = {}) {
+	const fill = width_ - width(text);
+	if (fill <= 0) {
+		return text;
+	}
+
+	if (align === 'right') {
+		return ' '.repeat(fill) + text;
+	}
+
+	if (align === 'center') {
+		// Fixed odd-space rule: extra space goes to the right.
+		const left = Math.floor(fill / 2);
+		const right = fill - left;
+		return ' '.repeat(left) + text + ' '.repeat(right);
+	}
+
+	// Default: 'left' — append fill to the right.
+	return text + ' '.repeat(fill);
+}
