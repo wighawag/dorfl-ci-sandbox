@@ -10,3 +10,11 @@ export function slugify(text) {
 export function capitalize(text) {
 	return text.length === 0 ? text : text[0].toUpperCase() + text.slice(1);
 }
+
+/** Truncate `text` to at most `max` characters, adding an ellipsis (…) when cut. */
+export function truncate(text, max) {
+	if (max < 1) {
+		throw new RangeError('max must be at least 1');
+	}
+	return text.length > max ? text.slice(0, max - 1) + '…' : text;
+}
