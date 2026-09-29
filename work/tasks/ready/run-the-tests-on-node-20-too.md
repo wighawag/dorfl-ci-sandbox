@@ -2,6 +2,7 @@
 title: 'Run the verify workflow on Node 20 as well as the default'
 slug: run-the-tests-on-node-20-too
 blockedBy: []
+needsAnswers: true
 ---
 
 ## What to build
